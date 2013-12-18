@@ -58,3 +58,9 @@ spec = do
         it "returns the remaining arguments" $ do
             result <- runCommand params getRemaining
             result `shouldBe` ["1", "2"]
+
+    describe "run" $ do
+        it "executes the IO action" $ do
+            res <- runCommand P.defaultParams . run $ do
+                fmap (head . lines) $ readFile "LICENSE"
+            res `shouldBe` "The MIT License (MIT)"

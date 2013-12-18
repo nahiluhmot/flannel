@@ -7,6 +7,7 @@ module System.Flannel.Command
     , getOption
     , getArg
     , getRemaining
+    , run
     ) where
 
 import Control.Monad.Reader
@@ -38,3 +39,7 @@ getArg = asks . P.getArg
 -- | Get the remaining arguments.
 getRemaining :: CommandM [String]
 getRemaining = asks P.getRemaining
+
+-- | Run an IO action within a 'CommandM'.
+run :: IO a -> CommandM a
+run = liftIO
