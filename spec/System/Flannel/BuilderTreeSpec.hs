@@ -30,8 +30,7 @@ spec = do
 
                 case head definition of
                     Namespace _ _ -> False `shouldBe` True
-                    Builder b -> do
-                        let BuilderState d a _ = runCommandBuilder b
+                    Builder (BuilderState d a _) -> do
 
                         d `shouldBe` "description"
                         a `shouldBe` expected
@@ -49,9 +48,7 @@ spec = do
 
                 case head definition of
                     Namespace _ _ -> False `shouldBe` True
-                    Builder b -> do
-                        let BuilderState d _ _ = runCommandBuilder b
-                        
+                    Builder (BuilderState d _ _) -> do
                         d `shouldBe` "d1"
 
     describe "namespace" $ do

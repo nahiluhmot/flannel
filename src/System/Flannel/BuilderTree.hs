@@ -15,7 +15,7 @@ import System.Flannel.CommandBuilder
 
 -- | Each namespace has its own builder that will be executed when it is
 -- matched.
-data BuilderTree = Builder CommandBuilder 
+data BuilderTree = Builder BuilderState 
                  | Namespace String BuilderForest
 
 -- | A list of 'BuilderTree's.
@@ -33,7 +33,8 @@ define b = do
     forest <- get
     let f (Builder _) = True
         f _ = False
-    when (null $ filter f forest) . put $ Builder b : forest
+        b' = runCommandBuilder b
+    when (null $ filter f forest) . put $ Builder b' : forest
 
 -- | Define a new namespace.
 namespace :: String -> Dsl -> Dsl
