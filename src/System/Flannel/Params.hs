@@ -14,6 +14,7 @@ module System.Flannel.Params
     ) where
 
 import Control.Monad
+import Data.Monoid
 import qualified Data.Map as M
 
 -- | 'Params' is a mapping of the flags, options, arguments, and remaining args
@@ -23,6 +24,14 @@ data Params = Params { flags         :: M.Map String Bool
                      , arguments     :: M.Map String (Maybe String)
                      , remainingArgs :: [String]
                      } deriving (Eq, Show)
+
+instance Monoid Params where
+    mempty = defaultParams
+    p1 `mappend` p2 =
+        Params (flags p2 `mappend` flags p1)
+               (options p2 `mappend` options p1)
+               (arguments p2 `mappend` arguments p1)
+               (remainingArgs p2 `mappend` remainingArgs p1)
 
 -- | By default, all 'flags', 'options', 'arguments', and 'remainingArgs' are
 -- empty.
