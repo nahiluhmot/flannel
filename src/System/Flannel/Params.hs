@@ -28,10 +28,10 @@ data Params = Params { flags         :: M.Map String Bool
 instance Monoid Params where
     mempty = defaultParams
     p1 `mappend` p2 =
-        Params (flags p2 `mappend` flags p1)
-               (options p2 `mappend` options p1)
-               (arguments p2 `mappend` arguments p1)
-               (remainingArgs p2 `mappend` remainingArgs p1)
+        Params (flags p1 `mappend` flags p2)
+               (options p1 `mappend` options p2)
+               (arguments p1 `mappend` arguments p2)
+               (remainingArgs p1 `mappend` remainingArgs p2)
 
 -- | By default, all 'flags', 'options', 'arguments', and 'remainingArgs' are
 -- empty.

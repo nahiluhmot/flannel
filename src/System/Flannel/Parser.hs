@@ -103,23 +103,23 @@ parseArguments :: [Parser PR.Params] -> [Parser PR.Params] -> Parser PR.Params
 parseArguments =
     let go params [] [] = do
             varArgs <- P.many anyString
-            return (params `mappend` PR.addRemaining varArgs PR.defaultParams)
+            return (PR.addRemaining varArgs PR.defaultParams `mappend` params)
         go params [] args = do
             len <- fmap length P.getInput
             if len > length args then do
                 ps <- fmap mconcat $ sequence args
                 varArgs <- P.many anyString
-                return $ params `mappend` PR.addRemaining varArgs ps
+                return $ PR.addRemaining varArgs ps `mappend` params
             else do
                 ps <- fmap mconcat $ sequence (take len args)
-                return $ params `mappend` ps
+                return $ ps `mappend` params
         go params flags args = do
             result <- findRem wouldWork flags
             case result of
                 Nothing -> go params [] args
                 Just (f, fs) -> do
                     p <- f
-                    go (params `mappend` p) fs args
+                    go (p `mappend` params) fs args
     in  go PR.defaultParams
 
 -- | Given a 'BuilderState' creates a 'Parser'.
